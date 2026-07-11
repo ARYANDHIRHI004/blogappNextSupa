@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
 
 const SignUpPage = () => {
   const [email, setEmail] = useState("");
@@ -78,7 +79,9 @@ const SignUpPage = () => {
             className={"bg-emerald-400 hover:bg-emerald-500 w-full h-10 mt-2"}
             type="submit"
           >
-            Sign Up
+            {
+              loading ?(<Spinner/>):("Sign Up")
+            }
           </Button>
 
           <p className="text-center text-zinc-400">

@@ -5,20 +5,35 @@ import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const supabase = createClient();
+
+  const router = useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(email);
-    console.log(password);
+    // setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
+      router.push("/");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "signup failed");
+    }
+
     setEmail("");
     setPassword("");
   };
-
   return (
     <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
       <Card className={"w-full max-w-md p-8 bg-zinc-900 border-zinc-800"}>
